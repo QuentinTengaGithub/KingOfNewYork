@@ -6,4 +6,5 @@
     <string name="options">OPTIONS</string>
     <string name="creditstext">creditsText</string>
     <string name="button">Button</string>
+    <string name="lancer_le_d">Lancer le dé</string>
 </resources>

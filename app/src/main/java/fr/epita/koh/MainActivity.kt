@@ -1,10 +1,10 @@
-package fr.example.koh
+package fr.epita.koh
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import com.example.koh.R
+import fr.epita.koh.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#7182E4"
-    tools:context=".GameActivity">
+    tools:context="fr.epita.koh.GameActivity">
 
     <Button
         android:id="@+id/button4"
@@ -15,9 +15,10 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="277dp"
-        android:text="Lancer le dé"
+        android:text="@string/lancer_le_d"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button5" />
+        app:layout_constraintTop_toBottomOf="@+id/button5"
+        tools:ignore="DuplicateSpeakableTextCheck" />
 
     <Button
         android:id="@+id/button5"
@@ -27,7 +28,7 @@
         android:layout_marginEnd="137dp"
         android:layout_marginRight="137dp"
         android:layout_marginBottom="277dp"
-        android:text="Lancer le dé"
+        android:text="@string/lancer_le_d"
         app:layout_constraintBottom_toTopOf="@+id/button4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -39,7 +40,7 @@
         android:layout_marginTop="277dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:text="Lancer le dé"
+        android:text="@string/lancer_le_d"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button5" />
 
@@ -53,11 +54,20 @@
         android:layout_marginEnd="136dp"
         android:layout_marginRight="136dp"
         android:layout_marginBottom="16dp"
-        android:text="Lancer le dé"
+        android:text="@string/lancer_le_d"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button4"
         app:layout_constraintVertical_bias="0.166" />
+
+    <!--<fr.epita.koh.views.BoardView
+        android:id="@+id/boardView"
+        android:layout_width="206dp"
+        android:layout_height="259dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>

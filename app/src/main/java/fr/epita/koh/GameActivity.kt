@@ -1,8 +1,8 @@
-package fr.example.koh
+package fr.epita.koh
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.koh.R
+import fr.epita.koh.R
 
 class GameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

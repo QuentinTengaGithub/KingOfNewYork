@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.android">
+    package="fr.epita.koh">
 
     <application
         android:icon="@mipmap/ic_launcher"
@@ -10,18 +10,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Android">
         <activity
-            android:name=".CreditsActivity"
-            android:parentActivityName=".MainActivity"
+            android:name="fr.epita.koh.CreditsActivity"
+            android:parentActivityName="fr.epita.koh.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".GameActivity"
+            android:name="fr.epita.koh.GameActivity"
             android:exported="false"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName="fr.epita.koh.MainActivity" />
            <!-- android:screenOrientation="landscape"
             tools:ignore="LockedOrientationActivity" /> -->
 
         <activity
-            android:name=".MainActivity"
+            android:name="fr.epita.koh.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

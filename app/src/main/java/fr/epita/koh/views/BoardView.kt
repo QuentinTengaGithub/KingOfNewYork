@@ -8,7 +8,7 @@ import android.graphics.drawable.Drawable
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
-import com.example.koh.R
+import fr.epita.koh.R
 
 /**
  * TODO: document your custom view class.
@@ -94,12 +94,14 @@ class BoardView : View {
             exampleDimension
         )
 
+        val boardImg = resources.assets.open("newYorkMap.jpg");
+
         if (a.hasValue(R.styleable.BoardView_exampleDrawable)) {
-            exampleDrawable = a.getDrawable(
-                R.styleable.BoardView_exampleDrawable
-            )
+            exampleDrawable = Drawable.createFromStream(boardImg, "newYorkMap");
             exampleDrawable?.callback = this
         }
+
+        boardImg.close();
 
         a.recycle()
 
