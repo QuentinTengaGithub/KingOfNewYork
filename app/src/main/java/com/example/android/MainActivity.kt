@@ -17,4 +17,10 @@ class MainActivity : AppCompatActivity() {
         }
         startActivity(intent)
     }
+
+    fun getCreditsScreen(view: View) {
+        val intent =  Intent(this, CreditsActivity::class.java).apply {
+        }
+        startActivity(intent)
+    }
 }

@@ -4,4 +4,6 @@
     <string name="game_logo">game_logo</string>
     <string name="credits">CREDITS</string>
     <string name="options">OPTIONS</string>
+    <string name="creditstext">creditsText</string>
+    <string name="button">Button</string>
 </resources>
