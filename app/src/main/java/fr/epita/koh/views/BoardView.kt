@@ -15,48 +15,7 @@ import fr.epita.koh.R
  */
 class BoardView : View {
 
-    private var _exampleString: String? = null // TODO: use a default from R.string...
-    private var _exampleColor: Int = Color.RED // TODO: use a default from R.color...
-    private var _exampleDimension: Float = 0f // TODO: use a default from R.dimen...
-
-    private lateinit var textPaint: TextPaint
-    private var textWidth: Float = 0f
-    private var textHeight: Float = 0f
-
-    /**
-     * The text to draw
-     */
-    var exampleString: String?
-        get() = _exampleString
-        set(value) {
-            _exampleString = value
-            invalidateTextPaintAndMeasurements()
-        }
-
-    /**
-     * The font color
-     */
-    var exampleColor: Int
-        get() = _exampleColor
-        set(value) {
-            _exampleColor = value
-            invalidateTextPaintAndMeasurements()
-        }
-
-    /**
-     * In the example view, this dimension is the font size.
-     */
-    var exampleDimension: Float
-        get() = _exampleDimension
-        set(value) {
-            _exampleDimension = value
-            invalidateTextPaintAndMeasurements()
-        }
-
-    /**
-     * In the example view, this drawable is drawn above the text.
-     */
-    var exampleDrawable: Drawable? = null
+    private var boardTexture: Drawable? = null
 
     constructor(context: Context) : super(context) {
         init(null, 0)
@@ -80,48 +39,12 @@ class BoardView : View {
             attrs, R.styleable.BoardView, defStyle, 0
         )
 
-        _exampleString = a.getString(
-            R.styleable.BoardView_exampleString
-        )
-        _exampleColor = a.getColor(
-            R.styleable.BoardView_exampleColor,
-            exampleColor
-        )
-        // Use getDimensionPixelSize or getDimensionPixelOffset when dealing with
-        // values that should fall on pixel boundaries.
-        _exampleDimension = a.getDimension(
-            R.styleable.BoardView_exampleDimension,
-            exampleDimension
-        )
-
         val boardImg = resources.assets.open("newYorkMap.jpg");
-
-        if (a.hasValue(R.styleable.BoardView_exampleDrawable)) {
-            exampleDrawable = Drawable.createFromStream(boardImg, "newYorkMap");
-            exampleDrawable?.callback = this
-        }
-
+        boardTexture = Drawable.createFromStream(boardImg, "newYorkMap");
+        boardTexture?.callback = this
         boardImg.close();
 
         a.recycle()
-
-        // Set up a default TextPaint object
-        textPaint = TextPaint().apply {
-            flags = Paint.ANTI_ALIAS_FLAG
-            textAlign = Paint.Align.LEFT
-        }
-
-        // Update TextPaint and text measurements from attributes
-        invalidateTextPaintAndMeasurements()
-    }
-
-    private fun invalidateTextPaintAndMeasurements() {
-        textPaint.let {
-            it.textSize = exampleDimension
-            it.color = exampleColor
-            textWidth = it.measureText(exampleString)
-            textHeight = it.fontMetrics.bottom
-        }
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -137,21 +60,14 @@ class BoardView : View {
         val contentWidth = width - paddingLeft - paddingRight
         val contentHeight = height - paddingTop - paddingBottom
 
-        exampleString?.let {
-            // Draw the text.
-            canvas.drawText(
-                it,
-                paddingLeft + (contentWidth - textWidth) / 2,
-                paddingTop + (contentHeight + textHeight) / 2,
-                textPaint
-            )
-        }
 
         // Draw the example drawable on top of the text.
-        exampleDrawable?.let {
+        boardTexture?.let {
             it.setBounds(
-                paddingLeft, paddingTop,
-                paddingLeft + contentWidth, paddingTop + contentHeight
+                paddingLeft,
+                paddingTop,
+                paddingLeft + contentWidth,
+                paddingTop + contentHeight
             )
             it.draw(canvas)
         }
