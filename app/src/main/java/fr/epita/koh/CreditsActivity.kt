@@ -1,8 +1,8 @@
-package com.example.android
+package fr.example.koh
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.TextView
+import com.example.koh.R
 
 class CreditsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
