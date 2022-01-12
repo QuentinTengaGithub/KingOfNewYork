@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Android</string>
+    <string name="nouvelle_partie">Nouvelle Partie</string>
+    <string name="game_logo">game_logo</string>
 </resources>
