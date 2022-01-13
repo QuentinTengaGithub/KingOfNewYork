@@ -11,7 +11,7 @@ class Player(isHuman : Boolean) {
     }
 
     fun play() : Boolean {
-        println(isHuman);
+        println(playerState);
         return true;
     }
 }
