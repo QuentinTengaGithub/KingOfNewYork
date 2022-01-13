@@ -277,6 +277,7 @@ class GameState(ctx : Context) {
             onPlayerTurnChanged?.invoke(i, false);
             onPlayerHealthChanged?.invoke(i, 0, 10);
             onPlayerVictoryPointsChanged?.invoke(i, 0, 0);
+            onPlayerEnergyChanged?.invoke(i, 0, 0);
         }
 
         for (p in players) {

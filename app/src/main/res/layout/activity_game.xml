@@ -130,7 +130,7 @@
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:id="@+id/PlayerOne"
+                    android:id="@+id/CardOneImg"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:contentDescription="@string/app_name"
@@ -165,6 +165,19 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     tools:ignore="TextContrastCheck,TouchTargetSizeCheck" />
+
+                <TextView
+                    android:id="@+id/PlayerOneEnergy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:text="16"
+                    android:textColor="#00BCD4"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@+id/CardOneImg"
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -219,6 +232,19 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     tools:ignore="TextContrastCheck,TouchTargetSizeCheck" />
+
+                <TextView
+                    android:id="@+id/PlayerTwoEnergy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:text="16"
+                    android:textColor="#00BCD4"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@+id/PlayerTwo"
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -274,6 +300,19 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     tools:ignore="TextContrastCheck,TouchTargetSizeCheck" />
+
+                    <TextView
+                        android:id="@+id/PlayerThreeEnergy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="8dp"
+                        android:text="16"
+                        android:textColor="#00BCD4"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="@+id/PlayerThree"
+                        app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -329,6 +368,19 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     tools:ignore="TextContrastCheck,TouchTargetSizeCheck" />
+
+                <TextView
+                    android:id="@+id/PlayerFourEnergy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:text="16"
+                    android:textColor="#00BCD4"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@+id/PlayerFour"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

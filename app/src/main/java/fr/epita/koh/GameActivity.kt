@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
@@ -26,6 +27,8 @@ class GameActivity : AppCompatActivity() {
 
     private val playerPoints = mutableListOf<Chip>();
 
+    private val playerEnergy = mutableListOf<TextView>();
+
     private var insideTokyoImage : ImageView? = null;
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,8 +38,14 @@ class GameActivity : AppCompatActivity() {
         insideTokyoImage = findViewById(R.id.KingOfTheHillImage);
 
         // Reset & load all the views
+        playerEnergy.clear();
+        playerEnergy.add(findViewById(R.id.PlayerOneEnergy));
+        playerEnergy.add(findViewById(R.id.PlayerTwoEnergy));
+        playerEnergy.add(findViewById(R.id.PlayerThreeEnergy));
+        playerEnergy.add(findViewById(R.id.PlayerFourEnergy));
+
         playerImages.clear();
-        playerImages.add(findViewById(R.id.PlayerOne));
+        playerImages.add(findViewById(R.id.CardOneImg));
         playerImages.add(findViewById(R.id.PlayerTwo));
         playerImages.add(findViewById(R.id.PlayerThree));
         playerImages.add(findViewById(R.id.PlayerFour));
@@ -65,6 +74,7 @@ class GameActivity : AppCompatActivity() {
         gameState.onPlayerInsideTokyoChanged { id, inside -> onPlayerInsideTokyoChanged(id, inside); };
         gameState.onPlayerStateChanged { id, state -> onPlayerStateUpdate(id, state); };
         gameState.onPlayerVictoryPointsChanged { id, o, n -> onPlayerVPChanged(id, o, n); };
+        gameState.onPlayerEnergyChanged { id, o, n -> onPlayerEnergyChanged(id, o, n)};
 
         // Resets the state
         gameState.reset();
@@ -137,6 +147,15 @@ class GameActivity : AppCompatActivity() {
             gameState.winGame();
         }
         val chip = playerPoints[id];
+        chip.text = new.toString();
+
+        if (new > old)
+            shakeView(chip);
+    }
+
+    private fun onPlayerEnergyChanged(id : Int, old : Int, new : Int)
+    {
+        val chip = playerEnergy[id];
         chip.text = new.toString();
 
         if (new > old)
