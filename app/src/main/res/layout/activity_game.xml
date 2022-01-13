@@ -91,6 +91,7 @@
             android:id="@+id/roll_dice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="getDiceScreen"
             android:text="@string/lancer_le_d"
             tools:ignore="DuplicateSpeakableTextCheck" />
 

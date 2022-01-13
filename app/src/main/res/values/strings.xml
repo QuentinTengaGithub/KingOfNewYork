@@ -7,4 +7,7 @@
     <string name="creditstext">creditsText</string>
     <string name="button">Button</string>
     <string name="lancer_le_d">Lancer le dé</string>
+    <string name="title_activity_dice">DiceActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>
