@@ -3,6 +3,10 @@ package fr.epita.koh.game
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
+import android.view.View
+import androidx.core.content.ContextCompat.startActivity
+import fr.epita.koh.GameActivity
 import fr.epita.koh.R
 
 class GameState(ctx : Context) {
@@ -65,7 +69,15 @@ class GameState(ctx : Context) {
             PlayerState.EnterNewYork -> setPlayerStage(PlayerState.BuyPowerCards);
             PlayerState.BuyPowerCards -> setPlayerStage(PlayerState.EndOfTurn);
             PlayerState.EndOfTurn -> {
-                while (!setPlayerTurn((currentPlayerTurn + 1) % players.size));
+                var skipped = false;
+                for (i in 0 until 4) {
+                    if (setPlayerTurn((currentPlayerTurn + 1) % players.size)) {
+                        skipped = true;
+                        break
+                    };
+                }
+
+                if (!skipped) setPlayerStage(PlayerState.Winner);
             };
         }
 
@@ -160,6 +172,11 @@ class GameState(ctx : Context) {
         }
 
         onPlayerInsideTokyoChanged?.invoke(kingOfTheHill, true);
+    }
+
+    fun winGame() {
+        setPlayerStage(PlayerState.Winner);
+        onPlayerStateChanged?.invoke(currentPlayerTurn, PlayerState.Winner);
     }
 
     fun enterKingOfTheHill() {
@@ -265,5 +282,9 @@ class GameState(ctx : Context) {
 
     fun isKing(id: Int): Boolean {
         return kingOfTheHill == id;
+    }
+
+    fun getCurrentTurn() : Int {
+        return currentPlayerTurn;
     }
 }

@@ -1,5 +1,6 @@
 package fr.epita.koh
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -8,10 +9,7 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
-import fr.epita.koh.fragments.BuyCardsFragment
-import fr.epita.koh.fragments.MoveToTopOfHill
-import fr.epita.koh.fragments.NextPlayerFragment
-import fr.epita.koh.fragments.RollDiceFragment
+import fr.epita.koh.fragments.*
 import fr.epita.koh.game.Dice
 import fr.epita.koh.game.GameState
 import fr.epita.koh.game.PlayerState
@@ -72,6 +70,11 @@ class GameActivity : AppCompatActivity() {
         gameState.reset();
     }
 
+    fun getMenuScreen() {
+        val intent = Intent(this, MainActivity::class.java).apply {}
+        startActivity(intent)
+    }
+
     fun onCommittedDice(dice : Array<Dice>) {
         gameState.onCommittedDice(dice);
         gameState.nextStage();
@@ -82,6 +85,7 @@ class GameActivity : AppCompatActivity() {
             PlayerState.RollDice -> changeScreen(RollDiceFragment());
             PlayerState.EnterNewYork -> changeScreen(MoveToTopOfHill());
             PlayerState.BuyPowerCards -> changeScreen(BuyCardsFragment());
+            PlayerState.Winner -> changeScreen(GameFinishedFragment());
             else -> changeScreen(NextPlayerFragment());
         }
 
@@ -129,6 +133,9 @@ class GameActivity : AppCompatActivity() {
 
     private fun onPlayerVPChanged(id : Int, old : Int, new : Int)
     {
+        if (new >= 20) {
+            gameState.winGame();
+        }
         val chip = playerPoints[id];
         chip.text = new.toString();
 
@@ -177,5 +184,9 @@ class GameActivity : AppCompatActivity() {
 
     fun canBecomeKingOfNY(): Boolean {
         return gameState.canBecomeKingOfNY();
+    }
+
+    fun currentPlayerID() : Int {
+        return gameState.getCurrentTurn();
     }
 }

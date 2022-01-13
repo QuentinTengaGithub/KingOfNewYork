@@ -17,7 +17,7 @@ class NextPlayerFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_next_player, container, false);
         val activity: GameActivity = activity as GameActivity
 
-        view.findViewById<Button>(R.id.next_player_btn).setOnClickListener {
+        view.findViewById<Button>(R.id.back_to_menu_btn).setOnClickListener {
             activity.skipStage();
         }
 

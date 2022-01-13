@@ -10,12 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Android" >
         <activity
-            android:name=".DiceActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:exported="false"
-            android:label="@string/title_activity_dice"
-            android:theme="@style/Theme.Android.Fullscreen" />
-        <activity
             android:name=".CreditsActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity" />

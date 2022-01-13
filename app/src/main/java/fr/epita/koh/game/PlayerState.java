@@ -5,5 +5,6 @@ public enum PlayerState {
     RollDice,
     EnterNewYork,
     BuyPowerCards,
-    EndOfTurn
+    EndOfTurn,
+    Winner
 }

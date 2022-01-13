@@ -25,7 +25,7 @@ class MoveToTopOfHill : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_move_to_top_of_hill, container, false);
-        val btn = view.findViewById<Button>(R.id.next_player_btn);
+        val btn = view.findViewById<Button>(R.id.back_to_menu_btn);
         val activity: GameActivity = activity as GameActivity
 
         if (activity.canBecomeKingOfNY()) {
