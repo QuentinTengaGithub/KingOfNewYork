@@ -23,7 +23,7 @@ class Player(isHuman : Boolean) {
     fun attack() {
         --playerHealth;
 
-        if (playerHealth < 0) {
+        if (playerHealth <= 0) {
             playerDead = true;
         }
     }

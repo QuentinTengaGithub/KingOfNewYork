@@ -1,8 +1,11 @@
 package fr.epita.koh.game
 
+import android.app.AlertDialog
+import android.content.Context
+import android.content.DialogInterface
 import fr.epita.koh.R
 
-class GameState {
+class GameState(ctx : Context) {
     private var onPlayerTurnChanged: ((Int, Boolean) -> Unit)? = null
 
     private var onPlayerInsideTokyoChanged: ((Int, Boolean) -> Unit)? = null
@@ -14,6 +17,8 @@ class GameState {
     private var onPlayerEnergyChanged: ((Int, Int, Int) -> Unit)? = null
 
     private var onPlayerStateChanged: ((Int, PlayerState) -> Unit)? = null
+
+    private val ctx : Context = ctx;
 
     private val players = arrayOf(
         Player(true),
@@ -40,6 +45,13 @@ class GameState {
         currentPlayerTurn = newTurn;
         players[currentPlayerTurn].playerState = PlayerState.RollDice;
 
+        if (kingOfTheHill == currentPlayerTurn) {
+            val lastVP = players[currentPlayerTurn].playerVictoryPoints;
+            players[currentPlayerTurn].playerVictoryPoints += 2;
+            onPlayerVictoryPointsChanged?.invoke(currentPlayerTurn, lastVP,
+                players[currentPlayerTurn].playerVictoryPoints)
+        }
+
         return !players[currentPlayerTurn].playerDead;
     }
 
@@ -49,11 +61,7 @@ class GameState {
 
     private fun nextPlayerStage() {
         when (players[currentPlayerTurn].playerState) {
-            PlayerState.RollDice -> {
-                if (kingOfTheHill == currentPlayerTurn)
-                    players[currentPlayerTurn].playerVictoryPoints += 2;
-                setPlayerStage(PlayerState.EnterNewYork)
-            };
+            PlayerState.RollDice -> setPlayerStage(PlayerState.EnterNewYork)
             PlayerState.EnterNewYork -> setPlayerStage(PlayerState.BuyPowerCards);
             PlayerState.BuyPowerCards -> setPlayerStage(PlayerState.EndOfTurn);
             PlayerState.EndOfTurn -> {
@@ -74,9 +82,9 @@ class GameState {
 
                     victim.attack();
 
-                    if (victim.playerDead) onPlayerDead(i);
-
                     onPlayerHealthChanged?.invoke(i, oldHealth, victim.playerHealth);
+
+                    if (victim.playerDead) onPlayerDead(i);
                 }
             }
         } else if (kingOfTheHill >= 0) {
@@ -86,22 +94,52 @@ class GameState {
 
             victim.attack();
 
-            if (victim.playerDead) onPlayerDead(kingOfTheHill);
-
             onPlayerHealthChanged?.invoke(kingOfTheHill, oldHealth, victim.playerHealth);
+
+            if (victim.playerDead) onPlayerDead(kingOfTheHill);
+            else {
+                val dialogBuilder = AlertDialog.Builder(ctx)
+
+                // set message of alert dialog
+                dialogBuilder.setMessage("Le joueur " + (kingOfTheHill + 1) +
+                        " peut choisir de quitter New York.")
+                    // if the dialog is cancelable
+                    .setCancelable(false)
+                    // positive button text and action
+                    .setPositiveButton("Rester", DialogInterface.OnClickListener {
+                            _, _ -> {}
+                    })
+                    // negative button text and action
+                    .setNegativeButton("Quitter New York", DialogInterface.OnClickListener {
+                            _, _ -> run {
+                            enterKingOfTheHill(-1)
+                            setPlayerStage(PlayerState.EnterNewYork);
+                            onPlayerStateChanged?.invoke(currentPlayerTurn, PlayerState.EnterNewYork);
+                        }
+                    })
+
+                // create dialog box
+                val alert = dialogBuilder.create();
+                // set title for alert dialog box
+                alert.setTitle("Quitter New York?");
+                // show alert dialog
+                alert.show();
+            }
         }
     }
 
     private fun onPlayerDead(playerId: Int) {
         if (playerId == kingOfTheHill) {
             //King of the hill died, free spot
-            onPlayerInsideTokyoChanged?.invoke(playerId, false);
+            onPlayerInsideTokyoChanged?.invoke(-1, true);
             kingOfTheHill = -1;
         }
     }
 
     private fun healPlayer(playerId: Int) {
+        val oldH = players[playerId].playerHealth;
         players[playerId].heal();
+        onPlayerHealthChanged?.invoke(playerId, oldH, players[playerId].playerHealth);
     }
 
     private fun enterKingOfTheHill(playerId: Int) {
@@ -110,10 +148,17 @@ class GameState {
 
         kingOfTheHill = playerId;
 
-        val lastVP = players[playerId].playerVictoryPoints;
-        players[playerId].playerVictoryPoints += 1;
+        if (kingOfTheHill >= 0) {
+            val lastVP = players[playerId].playerVictoryPoints;
+            players[playerId].playerVictoryPoints += 1;
 
-        onPlayerVictoryPointsChanged?.invoke(playerId, lastVP, players[playerId].playerVictoryPoints)
+            onPlayerVictoryPointsChanged?.invoke(
+                playerId,
+                lastVP,
+                players[playerId].playerVictoryPoints
+            )
+        }
+
         onPlayerInsideTokyoChanged?.invoke(kingOfTheHill, true);
     }
 

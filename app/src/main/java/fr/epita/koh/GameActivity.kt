@@ -18,7 +18,7 @@ import fr.epita.koh.game.PlayerState
 
 class GameActivity : AppCompatActivity() {
 
-    private val gameState = GameState();
+    private val gameState = GameState(this);
 
     private val playerCards = mutableListOf<MaterialCardView>();
 
@@ -97,7 +97,7 @@ class GameActivity : AppCompatActivity() {
     private fun onPlayerInsideTokyoChanged(id : Int, inside : Boolean)
     {
         if (id < 0) {
-            insideTokyoImage!!.setImageResource(0);
+            if (inside) insideTokyoImage!!.setImageResource(0);
         } else {
             val card = playerCards[id];
 
