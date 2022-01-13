@@ -10,7 +10,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="0dp"
-        android:layout_height="350dp"
+        android:layout_height="250dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
@@ -80,7 +80,9 @@
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="0dp"
-        android:layout_height="150dp"
+        android:layout_height="180dp"
+        android:layout_marginTop="8dp"
+        android:background="#D6D6D6"
         android:clipToPadding="false"
         android:orientation="horizontal"
         android:padding="10dp"
@@ -88,89 +90,236 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView">
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/PlayerOneCard"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:animateLayoutChanges="true"
+            android:clickable="true"
+            android:focusable="true"
             app:cardCornerRadius="10dp"
             app:cardElevation="2dp"
-            app:cardUseCompatPadding="true">
+            app:cardUseCompatPadding="true"
+            app:strokeColor="#FFBF00"
+            app:strokeWidth="5dp"
+            tools:ignore="DuplicateSpeakableTextCheck">
 
-            <ImageView
-                android:id="@+id/PlayerOne"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:contentDescription="@string/app_name"
-                android:scaleType="centerCrop"
-                tools:ignore="ImageContrastCheck"
-                tools:srcCompat="@drawable/khupstar" />
-        </androidx.cardview.widget.CardView>
+                android:layout_height="match_parent">
 
-        <androidx.cardview.widget.CardView
+                <ImageView
+                    android:id="@+id/PlayerOne"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/app_name"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/khupstar"
+                    tools:ignore="ImageContrastCheck" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/PlayerOnePoints"
+                    android:layout_width="50dp"
+                    android:layout_height="42dp"
+                    android:fontFamily="sans-serif"
+                    android:text="@string/defaultPoints"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:textColor="#171717"
+                    app:chipStrokeWidth="2dp"
+                    app:chipSurfaceColor="#FFD500"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="TextContrastCheck,DuplicateSpeakableTextCheck,TouchTargetSizeCheck" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/PlayerOneHealth"
+                    android:layout_width="50dp"
+                    android:layout_height="42dp"
+                    android:fontFamily="sans-serif"
+                    android:text="@string/defaultPoints"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:textColor="#EDEDED"
+                    app:chipStrokeWidth="2dp"
+                    app:chipSurfaceColor="#8F2A2A"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:ignore="TextContrastCheck,TouchTargetSizeCheck" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/PlayerTwoCard"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:animateLayoutChanges="true"
+            android:clickable="true"
+            android:focusable="true"
             app:cardCornerRadius="10dp"
             app:cardElevation="2dp"
             app:cardUseCompatPadding="true">
 
-            <ImageView
-                android:id="@+id/PlayerTwo"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:contentDescription="@string/app_name"
-                android:scaleType="centerCrop"
-                tools:ignore="ImageContrastCheck"
-                tools:srcCompat="@drawable/mohamed_salah" />
-        </androidx.cardview.widget.CardView>
+                android:layout_height="match_parent">
 
-        <androidx.cardview.widget.CardView
+                <ImageView
+                    android:id="@+id/PlayerTwo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/app_name"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/mohamed_salah" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/PlayerTwoPoints"
+                    android:layout_width="50dp"
+                    android:layout_height="42dp"
+                    android:fontFamily="sans-serif"
+                    android:text="@string/defaultPoints"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:textColor="#171717"
+                    app:chipStrokeWidth="2dp"
+                    app:chipSurfaceColor="#FFD500"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="TextContrastCheck,DuplicateSpeakableTextCheck,TouchTargetSizeCheck" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/PlayerTwoHealth"
+                    android:layout_width="50dp"
+                    android:layout_height="42dp"
+                    android:fontFamily="sans-serif"
+                    android:text="@string/defaultPoints"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:textColor="#EDEDED"
+                    app:chipStrokeWidth="2dp"
+                    app:chipSurfaceColor="#8F2A2A"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:ignore="TextContrastCheck,TouchTargetSizeCheck" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/PlayerThreeCard"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:animateLayoutChanges="true"
+            android:clickable="true"
+            android:focusable="true"
             app:cardCornerRadius="10dp"
             app:cardElevation="2dp"
             app:cardUseCompatPadding="true">
 
-            <ImageView
-                android:id="@+id/PlayerThree"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:contentDescription="@string/app_name"
-                android:scaleType="centerCrop"
-                tools:ignore="ImageContrastCheck"
-                tools:srcCompat="@drawable/nicki_minaj" />
-        </androidx.cardview.widget.CardView>
+                android:layout_height="match_parent">
 
-        <androidx.cardview.widget.CardView
+                <ImageView
+                    android:id="@+id/PlayerThree"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/app_name"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/nicki_minaj"
+                    tools:ignore="ImageContrastCheck" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/PlayerThreePoints"
+                    android:layout_width="50dp"
+                    android:layout_height="42dp"
+                    android:fontFamily="sans-serif"
+                    android:text="@string/defaultPoints"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:textColor="#171717"
+                    app:chipStrokeWidth="2dp"
+                    app:chipSurfaceColor="#FFD500"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="TextContrastCheck,DuplicateSpeakableTextCheck,TouchTargetSizeCheck" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/PlayerThreeHealth"
+                    android:layout_width="50dp"
+                    android:layout_height="42dp"
+                    android:fontFamily="sans-serif"
+                    android:text="@string/defaultPoints"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:textColor="#EDEDED"
+                    app:chipStrokeWidth="2dp"
+                    app:chipSurfaceColor="#8F2A2A"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:ignore="TextContrastCheck,TouchTargetSizeCheck" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/PlayerFourCard"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:animateLayoutChanges="true"
+            android:clickable="true"
+            android:focusable="true"
             app:cardCornerRadius="10dp"
             app:cardElevation="2dp"
             app:cardUseCompatPadding="true">
 
-            <ImageView
-                android:id="@+id/PlayerFour"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:contentDescription="@string/app_name"
-                android:scaleType="centerCrop"
-                tools:ignore="ImageContrastCheck"
-                tools:srcCompat="@drawable/the_rock" />
-        </androidx.cardview.widget.CardView>
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/PlayerFour"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/app_name"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/the_rock"
+                    tools:ignore="ImageContrastCheck" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/PlayerFourPoints"
+                    android:layout_width="50dp"
+                    android:layout_height="42dp"
+                    android:fontFamily="sans-serif"
+                    android:text="@string/defaultPoints"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:textColor="#171717"
+                    app:chipStrokeWidth="2dp"
+                    app:chipSurfaceColor="#FFD500"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="TextContrastCheck,DuplicateSpeakableTextCheck,TouchTargetSizeCheck" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/PlayerFourHealth"
+                    android:layout_width="50dp"
+                    android:layout_height="42dp"
+                    android:fontFamily="sans-serif"
+                    android:text="@string/defaultPoints"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:textColor="#EDEDED"
+                    app:chipStrokeWidth="2dp"
+                    app:chipSurfaceColor="#8F2A2A"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:ignore="TextContrastCheck,TouchTargetSizeCheck" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
