@@ -1,8 +1,11 @@
 package fr.epita.koh
 
-import android.os.Bundle
+import android.content.Intent
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.view.View
+import fr.epita.koh.R
 import fr.epita.koh.game.GameState
 
 class GameActivity : AppCompatActivity() {
@@ -20,5 +23,10 @@ class GameActivity : AppCompatActivity() {
 
     private fun onRollDice() {
         gameState.play();
+    }
+    fun getDiceScreen(view: View) {
+        val intent =  Intent(this, DiceActivity::class.java).apply {
+        }
+        startActivity(intent)
     }
 }
