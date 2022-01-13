@@ -14,4 +14,9 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="commit_dice_txt">S\'engager</string>
+    <string name="become_king">Devenir Le Roi De New York</string>
+    <string name="Redraw">Repiocher</string>
+    <string name="Buy">Acheter</string>
+    <string name="Skip">Quitter</string>
+    <string name="next_player_str">Prochain Joueur</string>
 </resources>

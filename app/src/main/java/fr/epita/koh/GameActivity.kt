@@ -4,11 +4,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AnimationUtils
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import fr.epita.koh.fragments.BuyCardsFragment
 import fr.epita.koh.fragments.MoveToTopOfHill
+import fr.epita.koh.fragments.NextPlayerFragment
 import fr.epita.koh.fragments.RollDiceFragment
 import fr.epita.koh.game.Dice
 import fr.epita.koh.game.GameState
@@ -20,21 +22,27 @@ class GameActivity : AppCompatActivity() {
 
     private val playerCards = mutableListOf<MaterialCardView>();
 
+    private val playerImages = mutableListOf<ImageView>();
+
     private val playerHealths = mutableListOf<Chip>();
 
     private val playerPoints = mutableListOf<Chip>();
 
-    private val rollDiceScreen = RollDiceFragment();
-
-    private val moveToTopScreen = MoveToTopOfHill();
-
-    private val buyPowerCardsScreen = BuyCardsFragment();
+    private var insideTokyoImage : ImageView? = null;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
 
+        insideTokyoImage = findViewById(R.id.KingOfTheHillImage);
+
         // Reset & load all the views
+        playerImages.clear();
+        playerImages.add(findViewById(R.id.PlayerOne));
+        playerImages.add(findViewById(R.id.PlayerTwo));
+        playerImages.add(findViewById(R.id.PlayerThree));
+        playerImages.add(findViewById(R.id.PlayerFour));
+
         playerCards.clear();
         playerCards.add(findViewById(R.id.PlayerOneCard));
         playerCards.add(findViewById(R.id.PlayerTwoCard));
@@ -54,10 +62,11 @@ class GameActivity : AppCompatActivity() {
         playerPoints.add(findViewById(R.id.PlayerFourPoints));
 
         // Game events
-        gameState.onPlayerTurnChanged { id, hisTurn -> onPlayerTurnChanged(id, hisTurn) };
-        gameState.onPlayerHealthChanged { id, old, new -> onPlayerHealthChanged(id, old, new) };
-        gameState.onPlayerInsideTokyoChanged { id, inside -> onPlayerInsideTokyoChanged(id, inside) };
-        gameState.onPlayerStateChanged { id, state -> onPlayerStateUpdate(id, state) };
+        gameState.onPlayerTurnChanged { id, hisTurn -> onPlayerTurnChanged(id, hisTurn); };
+        gameState.onPlayerHealthChanged { id, old, new -> onPlayerHealthChanged(id, old, new); };
+        gameState.onPlayerInsideTokyoChanged { id, inside -> onPlayerInsideTokyoChanged(id, inside); };
+        gameState.onPlayerStateChanged { id, state -> onPlayerStateUpdate(id, state); };
+        gameState.onPlayerVictoryPointsChanged { id, o, n -> onPlayerVPChanged(id, o, n); };
 
         // Resets the state
         gameState.reset();
@@ -70,10 +79,10 @@ class GameActivity : AppCompatActivity() {
 
     private fun onPlayerStateUpdate(id: Int, state: PlayerState) {
         when (state) {
-            PlayerState.RollDice -> changeScreen(rollDiceScreen);
-            PlayerState.EnterNewYork -> changeScreen(moveToTopScreen);
-            PlayerState.BuyPowerCards -> changeScreen(buyPowerCardsScreen);
-            else -> changeScreen(rollDiceScreen);
+            PlayerState.RollDice -> changeScreen(RollDiceFragment());
+            PlayerState.EnterNewYork -> changeScreen(MoveToTopOfHill());
+            PlayerState.BuyPowerCards -> changeScreen(BuyCardsFragment());
+            else -> changeScreen(NextPlayerFragment());
         }
 
         println(state);
@@ -87,12 +96,21 @@ class GameActivity : AppCompatActivity() {
 
     private fun onPlayerInsideTokyoChanged(id : Int, inside : Boolean)
     {
-        val card = playerCards[id];
-
-        if (inside || gameState.getPlayer(id).playerDead) {
-            card.alpha = 0.5f;
+        if (id < 0) {
+            insideTokyoImage!!.setImageResource(0);
         } else {
-            card.alpha = 1f;
+            val card = playerCards[id];
+
+            if (inside) {
+
+                if (gameState.getPlayer(id).playerDead)
+                    card.alpha = 0f;
+                else card.alpha = 0.5f;
+
+                insideTokyoImage!!.setImageDrawable(playerImages[id].drawable)
+            } else {
+                card.alpha = 1f;
+            }
         }
     }
 
@@ -109,13 +127,31 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
+    private fun onPlayerVPChanged(id : Int, old : Int, new : Int)
+    {
+        val chip = playerPoints[id];
+        chip.text = new.toString();
+
+        if (new > old)
+            shakeView(chip);
+    }
+
     private fun onPlayerHealthChanged(id : Int, oldHealth : Int, newHealth : Int)
     {
         val healthChip = playerHealths[id];
+        val card = playerCards[id];
         healthChip.text = newHealth.toString();
 
         if (oldHealth > newHealth)
             shakeView(healthChip);
+
+        if (gameState.getPlayer(id).playerDead)
+            card.alpha = 0f;
+        else {
+            if (gameState.isKing(id))
+                card.alpha = 0.5f;
+            else card.alpha = 1f;
+        };
     }
 
     private fun shakeView(view : View) {
@@ -130,11 +166,16 @@ class GameActivity : AppCompatActivity() {
         view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.bounce_reset));
     }
 
-    private fun onRollDice() {
-        gameState.play();
+    fun becomeKingOfNY() {
+        gameState.enterKingOfTheHill();
+        skipStage();
     }
 
-    fun getDiceScreen(view: View) {
-        onRollDice();
+    fun skipStage() {
+        gameState.nextStage();
+    }
+
+    fun canBecomeKingOfNY(): Boolean {
+        return gameState.canBecomeKingOfNY();
     }
 }

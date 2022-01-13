@@ -104,11 +104,21 @@ class GameState {
         players[playerId].heal();
     }
 
-    fun enterKingOfTheHill(playerId: Int) {
-        onPlayerInsideTokyoChanged?.invoke(kingOfTheHill, false);
+    private fun enterKingOfTheHill(playerId: Int) {
+        if (kingOfTheHill >= 0)
+            onPlayerInsideTokyoChanged?.invoke(kingOfTheHill, false);
+
         kingOfTheHill = playerId;
+
+        val lastVP = players[playerId].playerVictoryPoints;
         players[playerId].playerVictoryPoints += 1;
+
+        onPlayerVictoryPointsChanged?.invoke(playerId, lastVP, players[playerId].playerVictoryPoints)
         onPlayerInsideTokyoChanged?.invoke(kingOfTheHill, true);
+    }
+
+    fun enterKingOfTheHill() {
+        enterKingOfTheHill(currentPlayerTurn);
     }
 
     fun onPlayerStateChanged(block: (Int, PlayerState) -> Unit) {
@@ -163,11 +173,13 @@ class GameState {
             current.playerVictoryPoints += oneCount;
             onPlayerVictoryPointsChanged?.invoke(currentPlayerTurn, oldVP, current.playerVictoryPoints);
         }
-        else if (twoCount >= 2) {
+
+        if (twoCount >= 2) {
             current.playerVictoryPoints += twoCount;
             onPlayerVictoryPointsChanged?.invoke(currentPlayerTurn, oldVP, current.playerVictoryPoints);
         }
-        else if (threeCount >= 3) {
+
+        if (threeCount >= 3) {
             current.playerVictoryPoints += threeCount;
             onPlayerVictoryPointsChanged?.invoke(currentPlayerTurn, oldVP, current.playerVictoryPoints);
         }
@@ -179,6 +191,7 @@ class GameState {
         for (i in 0 until 4) {
             onPlayerTurnChanged?.invoke(i, false);
             onPlayerHealthChanged?.invoke(i, 0, 10);
+            onPlayerVictoryPointsChanged?.invoke(i, 0, 0);
         }
 
         for (p in players) {
@@ -199,5 +212,13 @@ class GameState {
 
     fun nextStage() {
         nextPlayerStage();
+    }
+
+    fun canBecomeKingOfNY(): Boolean {
+        return kingOfTheHill < 0;
+    }
+
+    fun isKing(id: Int): Boolean {
+        return kingOfTheHill == id;
     }
 }

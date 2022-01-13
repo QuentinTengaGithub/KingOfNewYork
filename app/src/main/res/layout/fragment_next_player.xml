@@ -4,34 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.MoveToTopOfHill">
+    tools:context=".fragments.NextPlayerFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <Button
             android:id="@+id/next_player_btn"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginLeft="24dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="24dp"
             android:layout_marginRight="24dp"
             android:layout_marginBottom="24dp"
-            android:text="@string/become_king"
+            android:text="@string/next_player_str"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:textColor="#151515"
+            android:textColor="#FFFFFF"
             android:textSize="34sp"
             android:textStyle="bold"
-            app:backgroundTint="#FFEB3B"
+            app:backgroundTint="#2196F3"
             app:cornerRadius="50dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.56" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </FrameLayout>

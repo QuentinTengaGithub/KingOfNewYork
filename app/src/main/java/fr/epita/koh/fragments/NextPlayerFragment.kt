@@ -9,20 +9,15 @@ import android.widget.Button
 import fr.epita.koh.GameActivity
 import fr.epita.koh.R
 
-class BuyCardsFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = BuyCardsFragment()
-    }
-
+class NextPlayerFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.buy_cards_fragment, container, false);
+        val view = inflater.inflate(R.layout.fragment_next_player, container, false);
         val activity: GameActivity = activity as GameActivity
 
-        view.findViewById<Button>(R.id.shop_quit).setOnClickListener {
+        view.findViewById<Button>(R.id.next_player_btn).setOnClickListener {
             activity.skipStage();
         }
 
