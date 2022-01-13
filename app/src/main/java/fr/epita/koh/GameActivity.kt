@@ -18,12 +18,13 @@ class GameActivity : AppCompatActivity() {
 
         gameState.reset();
 
-        findViewById<Button>(R.id.roll_dice).setOnClickListener{ onRollDice(); }
+        //findViewById<Button>(R.id.roll_dice).setOnClickListener{ onRollDice(); }
     }
 
     private fun onRollDice() {
         gameState.play();
     }
+    
     fun getDiceScreen(view: View) {
         val intent =  Intent(this, DiceActivity::class.java).apply {
         }
