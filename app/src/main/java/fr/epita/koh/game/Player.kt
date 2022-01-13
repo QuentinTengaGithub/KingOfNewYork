@@ -20,8 +20,8 @@ class Player(isHuman : Boolean) {
         playerDead = false;
     }
 
-    fun attack() {
-        --playerHealth;
+    fun attack(count : Int) {
+        playerHealth -= count;
 
         if (playerHealth <= 0) {
             playerDead = true;

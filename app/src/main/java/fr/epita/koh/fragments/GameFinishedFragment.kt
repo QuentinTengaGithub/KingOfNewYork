@@ -26,7 +26,7 @@ class GameFinishedFragment : Fragment() {
             }
 
         view.findViewById<TextView>(R.id.winner_txt).text =
-            "Le joueur " + activity.currentPlayerID() + " à gagné!";
+            "Le joueur " + (activity.currentPlayerID() + 1) + " à gagné!";
 
         return view;
     }

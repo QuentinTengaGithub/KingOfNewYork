@@ -1,5 +1,6 @@
 package fr.epita.koh.fragments
 
+import android.opengl.Visibility
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -28,14 +29,25 @@ class MoveToTopOfHill : Fragment() {
         val btn = view.findViewById<Button>(R.id.back_to_menu_btn);
         val activity: GameActivity = activity as GameActivity
 
+        val stayPutBtn = view.findViewById<Button>(R.id.dont_go_to_hill);
+
+        if (activity.isFirstRound())
+        {
+            stayPutBtn.visibility = View.INVISIBLE;
+            stayPutBtn.isActivated = false;
+        }
+        else
+        {
+            stayPutBtn.setOnClickListener {
+                activity.skipStage();
+            }
+        }
+
         if (activity.canBecomeKingOfNY()) {
             btn.setOnClickListener {
                 activity.becomeKingOfNY();
             };
         } else {
-            /*Timer().schedule(timerTask {
-                activity.skipStage();
-            }, 1000)*/
             activity.skipStage();
         }
 

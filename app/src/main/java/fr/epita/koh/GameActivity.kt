@@ -182,6 +182,10 @@ class GameActivity : AppCompatActivity() {
         gameState.nextStage();
     }
 
+    fun isFirstRound() : Boolean {
+        return gameState.isFirstRound();
+    }
+
     fun canBecomeKingOfNY(): Boolean {
         return gameState.canBecomeKingOfNY();
     }

@@ -19,4 +19,5 @@
     <string name="Buy">Acheter</string>
     <string name="Skip">Quitter</string>
     <string name="next_player_str">Prochain Joueur</string>
+    <string name="skip_hill">Rester</string>
 </resources>

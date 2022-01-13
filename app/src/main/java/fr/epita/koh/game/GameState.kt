@@ -24,6 +24,10 @@ class GameState(ctx : Context) {
 
     private val ctx : Context = ctx;
 
+    private var playersLeft = 4;
+
+    private var isFirstRound = true;
+
     private val players = arrayOf(
         Player(true),
         Player(false),
@@ -36,9 +40,11 @@ class GameState(ctx : Context) {
 
     init {
         setPlayerTurn(0);
+        isFirstRound = true;
     }
 
     private fun setPlayerTurn(newTurn : Int) : Boolean {
+        isFirstRound = false;
         onPlayerTurnChanged?.invoke(newTurn, true);
 
         if (currentPlayerTurn >= 0) {
@@ -69,22 +75,22 @@ class GameState(ctx : Context) {
             PlayerState.EnterNewYork -> setPlayerStage(PlayerState.BuyPowerCards);
             PlayerState.BuyPowerCards -> setPlayerStage(PlayerState.EndOfTurn);
             PlayerState.EndOfTurn -> {
-                var skipped = false;
+                val startTurn = currentPlayerTurn;
+
                 for (i in 0 until 4) {
                     if (setPlayerTurn((currentPlayerTurn + 1) % players.size)) {
-                        skipped = true;
                         break
                     };
                 }
 
-                if (!skipped) setPlayerStage(PlayerState.Winner);
+                if (startTurn == currentPlayerTurn) winGame();
             };
         }
 
         onPlayerStateChanged?.invoke(currentPlayerTurn, players[currentPlayerTurn].playerState);
     }
 
-    private fun attackPlayers(attackerId : Int) {
+    private fun attackPlayers(attackerId : Int, count : Int) {
         if (kingOfTheHill == attackerId) {
             // Attack everyone else
             for (i in 0 until 4) {
@@ -92,11 +98,11 @@ class GameState(ctx : Context) {
                     val victim = players[i];
                     val oldHealth = victim.playerHealth;
 
-                    victim.attack();
+                    victim.attack(count);
 
                     onPlayerHealthChanged?.invoke(i, oldHealth, victim.playerHealth);
 
-                    if (victim.playerDead) onPlayerDead(i);
+                    if (oldHealth > 0 && victim.playerDead) onPlayerDead(i);
                 }
             }
         } else if (kingOfTheHill >= 0) {
@@ -104,11 +110,14 @@ class GameState(ctx : Context) {
             val victim = players[kingOfTheHill];
             val oldHealth = victim.playerHealth;
 
-            victim.attack();
+            victim.attack(count);
 
             onPlayerHealthChanged?.invoke(kingOfTheHill, oldHealth, victim.playerHealth);
 
-            if (victim.playerDead) onPlayerDead(kingOfTheHill);
+            if (victim.playerDead) {
+                if (oldHealth > 0)
+                    onPlayerDead(kingOfTheHill);
+            }
             else {
                 val dialogBuilder = AlertDialog.Builder(ctx)
 
@@ -119,14 +128,15 @@ class GameState(ctx : Context) {
                     .setCancelable(false)
                     // positive button text and action
                     .setPositiveButton("Rester", DialogInterface.OnClickListener {
-                            _, _ -> {}
+                            d, _ -> run {d.cancel();}
                     })
                     // negative button text and action
                     .setNegativeButton("Quitter New York", DialogInterface.OnClickListener {
-                            _, _ -> run {
+                            d, _ -> run {
                             enterKingOfTheHill(-1)
                             setPlayerStage(PlayerState.EnterNewYork);
                             onPlayerStateChanged?.invoke(currentPlayerTurn, PlayerState.EnterNewYork);
+                            d.cancel();
                         }
                     })
 
@@ -141,11 +151,15 @@ class GameState(ctx : Context) {
     }
 
     private fun onPlayerDead(playerId: Int) {
+        playersLeft -= 1;
+
         if (playerId == kingOfTheHill) {
             //King of the hill died, free spot
             onPlayerInsideTokyoChanged?.invoke(-1, true);
             kingOfTheHill = -1;
         }
+
+        if (playersLeft == 1) winGame();
     }
 
     private fun healPlayer(playerId: Int) {
@@ -172,6 +186,10 @@ class GameState(ctx : Context) {
         }
 
         onPlayerInsideTokyoChanged?.invoke(kingOfTheHill, true);
+    }
+
+    fun isFirstRound() : Boolean {
+        return isFirstRound;
     }
 
     fun winGame() {
@@ -213,13 +231,14 @@ class GameState(ctx : Context) {
         var oneCount = 0;
         var twoCount = 0;
         var threeCount = 0;
+        var attackCount = 0;
 
         for (dice in dice) {
             when (dice.diceState) {
                 DiceState.ONE -> ++oneCount
                 DiceState.TWO -> ++twoCount
                 DiceState.THREE -> ++threeCount
-                DiceState.ATTACK -> attackPlayers(currentPlayerTurn)
+                DiceState.ATTACK -> ++attackCount;
                 DiceState.HEAL -> if (kingOfTheHill != currentPlayerTurn) healPlayer(currentPlayerTurn)
                 DiceState.ENERGY -> {
                     val lastEnergy = current.playerEnergy;
@@ -228,6 +247,9 @@ class GameState(ctx : Context) {
                 }
             }
         }
+
+        if (attackCount > 0)
+            attackPlayers(currentPlayerTurn, attackCount);
 
         val oldVP = current.playerVictoryPoints;
 
@@ -249,6 +271,7 @@ class GameState(ctx : Context) {
 
     fun reset() {
         currentPlayerTurn = -1;
+        playersLeft = 4;
 
         for (i in 0 until 4) {
             onPlayerTurnChanged?.invoke(i, false);
@@ -261,6 +284,7 @@ class GameState(ctx : Context) {
         }
 
         setPlayerTurn(0);
+        isFirstRound = true;
     }
 
     fun play() {
