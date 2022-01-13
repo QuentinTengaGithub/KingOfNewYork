@@ -1,9 +1,19 @@
 package fr.epita.koh.game
 
+import fr.epita.koh.R
+
 class GameState {
     private var onPlayerTurnChanged: ((Int, Boolean) -> Unit)? = null
 
+    private var onPlayerInsideTokyoChanged: ((Int, Boolean) -> Unit)? = null
+
     private var onPlayerHealthChanged: ((Int, Int, Int) -> Unit)? = null
+
+    private var onPlayerVictoryPointsChanged: ((Int, Int, Int) -> Unit)? = null
+
+    private var onPlayerEnergyChanged: ((Int, Int, Int) -> Unit)? = null
+
+    private var onPlayerStateChanged: ((Int, PlayerState) -> Unit)? = null
 
     private val players = arrayOf(
         Player(true),
@@ -39,13 +49,19 @@ class GameState {
 
     private fun nextPlayerStage() {
         when (players[currentPlayerTurn].playerState) {
-            PlayerState.RollDice -> setPlayerStage(PlayerState.EnterNewYork);
+            PlayerState.RollDice -> {
+                if (kingOfTheHill == currentPlayerTurn)
+                    players[currentPlayerTurn].playerVictoryPoints += 2;
+                setPlayerStage(PlayerState.EnterNewYork)
+            };
             PlayerState.EnterNewYork -> setPlayerStage(PlayerState.BuyPowerCards);
             PlayerState.BuyPowerCards -> setPlayerStage(PlayerState.EndOfTurn);
             PlayerState.EndOfTurn -> {
                 while (!setPlayerTurn((currentPlayerTurn + 1) % players.size));
             };
         }
+
+        onPlayerStateChanged?.invoke(currentPlayerTurn, players[currentPlayerTurn].playerState);
     }
 
     private fun attackPlayers(attackerId : Int) {
@@ -79,8 +95,28 @@ class GameState {
     private fun onPlayerDead(playerId: Int) {
         if (playerId == kingOfTheHill) {
             //King of the hill died, free spot
+            onPlayerInsideTokyoChanged?.invoke(playerId, false);
             kingOfTheHill = -1;
         }
+    }
+
+    private fun healPlayer(playerId: Int) {
+        players[playerId].heal();
+    }
+
+    fun enterKingOfTheHill(playerId: Int) {
+        onPlayerInsideTokyoChanged?.invoke(kingOfTheHill, false);
+        kingOfTheHill = playerId;
+        players[playerId].playerVictoryPoints += 1;
+        onPlayerInsideTokyoChanged?.invoke(kingOfTheHill, true);
+    }
+
+    fun onPlayerStateChanged(block: (Int, PlayerState) -> Unit) {
+        this.onPlayerStateChanged = block;
+    }
+
+    fun onPlayerInsideTokyoChanged(block: (Int, Boolean) -> Unit) {
+        this.onPlayerInsideTokyoChanged = block;
     }
 
     fun onPlayerTurnChanged(block: (Int, Boolean) -> Unit) {
@@ -91,12 +127,58 @@ class GameState {
         this.onPlayerHealthChanged = block;
     }
 
+    fun onPlayerEnergyChanged(block: (Int, Int, Int) -> Unit) {
+        this.onPlayerEnergyChanged = block;
+    }
+
+    fun onPlayerVictoryPointsChanged(block: (Int, Int, Int) -> Unit) {
+        this.onPlayerVictoryPointsChanged = block;
+    }
+
+    fun onCommittedDice(dice : Array<Dice>) {
+        val current = players[currentPlayerTurn];
+
+        var oneCount = 0;
+        var twoCount = 0;
+        var threeCount = 0;
+
+        for (dice in dice) {
+            when (dice.diceState) {
+                DiceState.ONE -> ++oneCount
+                DiceState.TWO -> ++twoCount
+                DiceState.THREE -> ++threeCount
+                DiceState.ATTACK -> attackPlayers(currentPlayerTurn)
+                DiceState.HEAL -> if (kingOfTheHill != currentPlayerTurn) healPlayer(currentPlayerTurn)
+                DiceState.ENERGY -> {
+                    val lastEnergy = current.playerEnergy;
+                    ++current.playerEnergy;
+                    onPlayerEnergyChanged?.invoke(currentPlayerTurn, lastEnergy, current.playerEnergy);
+                }
+            }
+        }
+
+        val oldVP = current.playerVictoryPoints;
+
+        if (oneCount >= 1) {
+            current.playerVictoryPoints += oneCount;
+            onPlayerVictoryPointsChanged?.invoke(currentPlayerTurn, oldVP, current.playerVictoryPoints);
+        }
+        else if (twoCount >= 2) {
+            current.playerVictoryPoints += twoCount;
+            onPlayerVictoryPointsChanged?.invoke(currentPlayerTurn, oldVP, current.playerVictoryPoints);
+        }
+        else if (threeCount >= 3) {
+            current.playerVictoryPoints += threeCount;
+            onPlayerVictoryPointsChanged?.invoke(currentPlayerTurn, oldVP, current.playerVictoryPoints);
+        }
+    }
+
     fun reset() {
         currentPlayerTurn = -1;
 
         for (i in 0 until 4) {
             onPlayerTurnChanged?.invoke(i, false);
-            onPlayerHealthChanged?.invoke(i, 20, 10);
+            onPlayerHealthChanged?.invoke(i, 0, 10);
         }
 
         for (p in players) {
@@ -109,5 +191,13 @@ class GameState {
     fun play() {
         if (players[currentPlayerTurn].play())
             nextPlayerStage();
+    }
+
+    fun getPlayer(id: Int): Player {
+        return players[id];
+    }
+
+    fun nextStage() {
+        nextPlayerStage();
     }
 }

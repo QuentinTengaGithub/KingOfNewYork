@@ -4,9 +4,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AnimationUtils
+import androidx.fragment.app.Fragment
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
+import fr.epita.koh.fragments.BuyCardsFragment
+import fr.epita.koh.fragments.MoveToTopOfHill
+import fr.epita.koh.fragments.RollDiceFragment
+import fr.epita.koh.game.Dice
 import fr.epita.koh.game.GameState
+import fr.epita.koh.game.PlayerState
 
 class GameActivity : AppCompatActivity() {
 
@@ -18,10 +24,17 @@ class GameActivity : AppCompatActivity() {
 
     private val playerPoints = mutableListOf<Chip>();
 
+    private val rollDiceScreen = RollDiceFragment();
+
+    private val moveToTopScreen = MoveToTopOfHill();
+
+    private val buyPowerCardsScreen = BuyCardsFragment();
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
 
+        // Reset & load all the views
         playerCards.clear();
         playerCards.add(findViewById(R.id.PlayerOneCard));
         playerCards.add(findViewById(R.id.PlayerTwoCard));
@@ -40,10 +53,47 @@ class GameActivity : AppCompatActivity() {
         playerPoints.add(findViewById(R.id.PlayerThreePoints));
         playerPoints.add(findViewById(R.id.PlayerFourPoints));
 
+        // Game events
         gameState.onPlayerTurnChanged { id, hisTurn -> onPlayerTurnChanged(id, hisTurn) };
         gameState.onPlayerHealthChanged { id, old, new -> onPlayerHealthChanged(id, old, new) };
+        gameState.onPlayerInsideTokyoChanged { id, inside -> onPlayerInsideTokyoChanged(id, inside) };
+        gameState.onPlayerStateChanged { id, state -> onPlayerStateUpdate(id, state) };
 
+        // Resets the state
         gameState.reset();
+    }
+
+    fun onCommittedDice(dice : Array<Dice>) {
+        gameState.onCommittedDice(dice);
+        gameState.nextStage();
+    }
+
+    private fun onPlayerStateUpdate(id: Int, state: PlayerState) {
+        when (state) {
+            PlayerState.RollDice -> changeScreen(rollDiceScreen);
+            PlayerState.EnterNewYork -> changeScreen(moveToTopScreen);
+            PlayerState.BuyPowerCards -> changeScreen(buyPowerCardsScreen);
+            else -> changeScreen(rollDiceScreen);
+        }
+
+        println(state);
+    }
+
+    private fun changeScreen(frag : Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.userInterfaceFragment, frag)
+            .commit();
+    }
+
+    private fun onPlayerInsideTokyoChanged(id : Int, inside : Boolean)
+    {
+        val card = playerCards[id];
+
+        if (inside || gameState.getPlayer(id).playerDead) {
+            card.alpha = 0.5f;
+        } else {
+            card.alpha = 1f;
+        }
     }
 
     private fun onPlayerTurnChanged(id : Int, hisTurn : Boolean)
@@ -51,8 +101,10 @@ class GameActivity : AppCompatActivity() {
         val card = playerCards[id];
 
         if (hisTurn) {
+            bounceView(card);
             card.strokeWidth = 15;
         } else {
+            resetBounceView(card);
             card.strokeWidth = 0;
         }
     }
@@ -70,17 +122,19 @@ class GameActivity : AppCompatActivity() {
         view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
     }
 
+    private fun bounceView(view : View) {
+        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.bounce));
+    }
+
+    private fun resetBounceView(view : View) {
+        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.bounce_reset));
+    }
+
     private fun onRollDice() {
         gameState.play();
     }
 
     fun getDiceScreen(view: View) {
-        /*val intent =  Intent(this, DiceActivity::class.java).apply {
-        }
-        startActivity(intent)*/
-
         onRollDice();
-
-        //findViewById<Button>(R.id.roll_dice).startAnimation(AnimationUtils.loadAnimation(this,R.anim.shake));
     }
 }

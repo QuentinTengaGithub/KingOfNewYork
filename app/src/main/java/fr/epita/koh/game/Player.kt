@@ -2,6 +2,10 @@ package fr.epita.koh.game
 
 class Player(isHuman : Boolean) {
 
+    var playerEnergy : Int = 0
+
+    var playerVictoryPoints : Int = 0
+
     private val isHuman: Boolean = isHuman;
 
     var playerState : PlayerState = PlayerState.WaitingTurn;
@@ -27,5 +31,13 @@ class Player(isHuman : Boolean) {
     fun play() : Boolean {
         println(playerState);
         return true;
+    }
+
+    fun heal() {
+        ++playerHealth;
+
+        if (playerHealth > 10) {
+            playerHealth = 10;
+        }
     }
 }

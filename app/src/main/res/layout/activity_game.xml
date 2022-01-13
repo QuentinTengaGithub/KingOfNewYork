@@ -40,6 +40,7 @@
                 tools:ignore="ImageContrastCheck" />
 
             <ImageView
+                android:id="@+id/imageView3"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:contentDescription="@string/app_name"
@@ -51,6 +52,7 @@
                 app:srcCompat="@android:drawable/dialog_holo_light_frame" />
 
             <ImageView
+                android:id="@+id/imageView2"
                 android:layout_width="140dp"
                 android:layout_height="140dp"
                 android:contentDescription="@string/app_name"
@@ -72,6 +74,24 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@android:drawable/ic_input_add" />
+
+            <ImageView
+                android:id="@+id/KingOfTheHillImage"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerInside"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+                app:layout_constraintEnd_toEndOf="@+id/imageView2"
+                app:layout_constraintStart_toStartOf="@+id/imageView2"
+                app:layout_constraintTop_toTopOf="@+id/imageView2"
+                tools:ignore="ImageContrastCheck" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -219,7 +239,7 @@
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:id="@+id/PlayerThree"
+                    android:id="@+id/cardImg"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:contentDescription="@string/app_name"
@@ -327,13 +347,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
-        <Button
-            android:id="@+id/roll_dice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="getDiceScreen"
-            android:text="@string/lancer_le_d"
-            tools:ignore="DuplicateSpeakableTextCheck" />
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/userInterfaceFragment"
+            android:name="fr.epita.koh.fragments.RollDiceFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout="@layout/roll_dice_fragment" />
 
     </LinearLayout>
 
