@@ -1,28 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="fr.epita.koh">
+    package="fr.epita.koh" >
 
     <application
         android:icon="@mipmap/ic_launcher"
         android:label="KingOfNewYork"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Android">
+        android:theme="@style/Theme.Android" >
         <activity
-            android:name="fr.epita.koh.CreditsActivity"
-            android:parentActivityName="fr.epita.koh.MainActivity"
-            android:exported="false" />
-        <activity
-            android:name="fr.epita.koh.GameActivity"
+            android:name=".DiceActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="false"
-            android:parentActivityName="fr.epita.koh.MainActivity" />
-           <!-- android:screenOrientation="landscape"
-            tools:ignore="LockedOrientationActivity" /> -->
-
+            android:label="@string/title_activity_dice"
+            android:theme="@style/Theme.Android.Fullscreen" />
         <activity
-            android:name="fr.epita.koh.MainActivity"
-            android:exported="true">
+            android:name=".CreditsActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".GameActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+        <!--
+ android:screenOrientation="landscape"
+            tools:ignore="LockedOrientationActivity" />
+        -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
