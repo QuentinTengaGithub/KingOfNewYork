@@ -30,10 +30,58 @@ class GameState(ctx : Context) {
     private var isFirstRound = true;
 
     private val cardsList = arrayOf(
-        Card("Title", "Test", 69, EnumSet.of(
+        Card("Attack&Heal", "Attack&Heal", 7, EnumSet.of(
             CardEffect.ExtraAttack,
             CardEffect.ExtraHealTimes2
-        ))
+        ), R.drawable.card_0_img),
+
+        Card("ExtraAttack", "Attack all players", 4, EnumSet.of(
+            CardEffect.ExtraAttack
+        ), R.drawable.card_1_img),
+
+        Card("ExtraHeal", "Heal the buyer", 3, EnumSet.of(
+            CardEffect.ExtraHealTimes2
+        ), R.drawable.card_2_img),
+
+        Card("PermanentDiscount", "Permanent Discount for the buyer", 5, EnumSet.of(
+            CardEffect.PermanentCostDiscount
+        ), R.drawable.card_3_img),
+
+        Card("ExtraDiceRoll", "The player can roll the dice one extra time", 2, EnumSet.of(
+            CardEffect.ExtraDiceRoll
+        ), R.drawable.card_4_img),
+
+        Card("ExtraPoint", "Give 3 victory points", 4, EnumSet.of(
+            CardEffect.ExtraVictoryPointsTimes2
+        ), R.drawable.card_5_img),
+
+        Card("ExtraVictory&Heal", "Give 3 victory points and 2 heal points", 5, EnumSet.of(
+            CardEffect.ExtraVictoryPointsTimes2,
+            CardEffect.ExtraHealTimes2
+        ), R.drawable.card_6_img),
+
+        Card("ExtraPoint&Dice", "Give 3 victory points and roll the dice one extra time", 6, EnumSet.of(
+            CardEffect.ExtraVictoryPointsTimes2,
+            CardEffect.ExtraDiceRoll
+        ), R.drawable.card_1_img),
+
+        Card("ExtraHeal&Permanent Discount", "Give heal points and permanent discount", 8, EnumSet.of(
+            CardEffect.ExtraVictoryPointsTimes2,
+            CardEffect.PermanentCostDiscount
+        ), R.drawable.card_2_img),
+
+        Card("ExtraHeal&Attack", "Heal points and attack players", 7, EnumSet.of(
+            CardEffect.ExtraHealTimes2,
+            CardEffect.ExtraAttack
+        ), R.drawable.card_3_img),
+
+        Card("ExtraPoint & Heal & Attack & RollDice & PermanentDiscount", "MASTER CARD", 11, EnumSet.of(
+            CardEffect.ExtraVictoryPointsTimes2,
+            CardEffect.ExtraHealTimes2,
+            CardEffect.ExtraDiceRoll,
+            CardEffect.ExtraAttack,
+            CardEffect.PermanentCostDiscount
+        ), R.drawable.card_4_img)
     );
 
     private val players = arrayOf(
