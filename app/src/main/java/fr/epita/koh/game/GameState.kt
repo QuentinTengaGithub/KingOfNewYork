@@ -33,7 +33,7 @@ class GameState(ctx : Context) {
         Card("Title", "Test", 69, EnumSet.of(
             CardEffect.ExtraAttack,
             CardEffect.ExtraHealTimes2
-        ))
+        ),0)
     );
 
     private val players = arrayOf(
