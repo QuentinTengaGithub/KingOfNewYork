@@ -8,6 +8,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import fr.epita.koh.GameActivity
 import fr.epita.koh.R
+import fr.epita.koh.game.Card
+import fr.epita.koh.game.CardEffect
+import java.util.*
 
 class BuyCardsFragment : Fragment() {
 
@@ -19,6 +22,7 @@ class BuyCardsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         val view = inflater.inflate(R.layout.buy_cards_fragment, container, false);
         val activity: GameActivity = activity as GameActivity
 

@@ -13,9 +13,10 @@ enum class CardEffect {
     TakeAway2VictoryPointsAll
 }
 
-class Card (title : String, description : String, cost : Int, effect : EnumSet<CardEffect>) {
+class Card (title : String, description : String, cost : Int, effect : EnumSet<CardEffect>, cardImageId : Int) {
     val cardTitle = title;
     val cardDescription = description;
     val cardEffect = effect;
     val cardCost = cost;
+    val cardImageId = cardImageId;
 }
