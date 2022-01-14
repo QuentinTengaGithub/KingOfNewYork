@@ -192,6 +192,10 @@ class GameActivity : AppCompatActivity() {
         view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.bounce_reset));
     }
 
+    fun getExtraDiceCount() : Int {
+        return gameState.getExtraDiceRoll();
+    }
+
     fun becomeKingOfNY() {
         gameState.enterKingOfTheHill();
         skipStage();

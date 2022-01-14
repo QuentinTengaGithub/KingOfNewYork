@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat.startActivity
 import fr.epita.koh.GameActivity
 import fr.epita.koh.R
 import java.util.*
+import kotlin.math.max
 
 class GameState(ctx : Context) {
     private var onPlayerTurnChanged: ((Int, Boolean) -> Unit)? = null
@@ -246,13 +247,31 @@ class GameState(ctx : Context) {
 
     fun hasEnoughEnergy(card : Card) : Boolean {
         val player = players[currentPlayerTurn];
-        return player.playerEnergy >= card.cardCost;
+        val cost = max(1, card.cardCost - getCardDiscount());
+        return player.playerEnergy >= cost;
+    }
+
+    private fun addVictoryPoints(playerId : Int, count : Int) {
+        val lastVP = players[playerId].playerVictoryPoints;
+        players[playerId].playerVictoryPoints += count;
+
+        onPlayerVictoryPointsChanged?.invoke(
+            playerId,
+            lastVP,
+            players[playerId].playerVictoryPoints
+        )
     }
 
     fun buyCard(card : Card) : Boolean {
         if (!hasEnoughEnergy(card)) return  false;
 
         var attackCount = 0;
+        val cost = max(1, card.cardCost - getCardDiscount());
+
+        val current = players[currentPlayerTurn];
+        val lastEnergy = current.playerEnergy;
+        current.playerEnergy -= cost;
+        onPlayerEnergyChanged?.invoke(currentPlayerTurn, lastEnergy, current.playerEnergy);
 
         for (fx in card.cardEffect) {
             when(fx) {
@@ -262,17 +281,22 @@ class GameState(ctx : Context) {
                     healPlayer(currentPlayerTurn)
                 }
                 CardEffect.ExtraVictoryPointsTimes2 -> {
-                    val lastVP = players[currentPlayerTurn].playerVictoryPoints;
-                    players[currentPlayerTurn].playerVictoryPoints += 2;
-
-                    onPlayerVictoryPointsChanged?.invoke(
-                        currentPlayerTurn,
-                        lastVP,
-                        players[currentPlayerTurn].playerVictoryPoints
-                    )
+                    addVictoryPoints(currentPlayerTurn, 2);
                 }
                 CardEffect.ExtraDiceRoll -> {
                     players[currentPlayerTurn].extraDiceRoll += 1;
+                }
+                CardEffect.TakeAway2VictoryPointsAll -> {
+                    addVictoryPoints(0, -2);
+                    addVictoryPoints(1, -2);
+                    addVictoryPoints(2, -2);
+                    addVictoryPoints(3, -2);
+                }
+                CardEffect.StealKingSpot -> {
+                    enterKingOfTheHill(currentPlayerTurn);
+                }
+                CardEffect.PermanentCostDiscount -> {
+                    players[currentPlayerTurn].cardDiscount += 1;
                 }
             }
         }
@@ -282,6 +306,11 @@ class GameState(ctx : Context) {
         }
 
         return true;
+    }
+
+    fun getCardDiscount() : Int {
+        if (currentPlayerTurn < 0) return  0;
+        return players[currentPlayerTurn].cardDiscount;
     }
 
     fun getExtraDiceRoll() : Int {

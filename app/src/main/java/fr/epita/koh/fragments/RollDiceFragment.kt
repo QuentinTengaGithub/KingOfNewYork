@@ -34,6 +34,9 @@ class RollDiceFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.roll_dice_fragment, container, false);
+        val activity: GameActivity = activity as GameActivity
+
+        throws = 3 + activity.getExtraDiceCount();
 
         view.findViewById<Button>(R.id.commit_dice_btn)
             .setOnClickListener { onCommitDicePressed() };

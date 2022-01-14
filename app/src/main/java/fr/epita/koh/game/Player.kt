@@ -2,7 +2,10 @@ package fr.epita.koh.game
 
 class Player(isHuman : Boolean) {
 
+    var cardDiscount: Int = 0
+
     var extraDiceRoll: Int = 0
+
     var playerEnergy : Int = 0
 
     var playerVictoryPoints : Int = 0
@@ -20,6 +23,7 @@ class Player(isHuman : Boolean) {
         playerHealth = 10
         playerDead = false;
         extraDiceRoll = 0;
+        cardDiscount = 0;
     }
 
     fun attack(count : Int) {
