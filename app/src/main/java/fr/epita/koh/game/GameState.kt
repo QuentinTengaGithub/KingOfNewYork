@@ -8,6 +8,7 @@ import android.view.View
 import androidx.core.content.ContextCompat.startActivity
 import fr.epita.koh.GameActivity
 import fr.epita.koh.R
+import java.util.*
 
 class GameState(ctx : Context) {
     private var onPlayerTurnChanged: ((Int, Boolean) -> Unit)? = null
@@ -27,6 +28,13 @@ class GameState(ctx : Context) {
     private var playersLeft = 4;
 
     private var isFirstRound = true;
+
+    private val cardsList = arrayOf(
+        Card("Title", "Test", 69, EnumSet.of(
+            CardEffect.ExtraAttack,
+            CardEffect.ExtraHealTimes2
+        ))
+    );
 
     private val players = arrayOf(
         Player(true),
