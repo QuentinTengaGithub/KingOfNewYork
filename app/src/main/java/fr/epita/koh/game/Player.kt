@@ -2,6 +2,7 @@ package fr.epita.koh.game
 
 class Player(isHuman : Boolean) {
 
+    var extraDiceRoll: Int = 0
     var playerEnergy : Int = 0
 
     var playerVictoryPoints : Int = 0
@@ -18,6 +19,7 @@ class Player(isHuman : Boolean) {
         playerState = PlayerState.WaitingTurn;
         playerHealth = 10
         playerDead = false;
+        extraDiceRoll = 0;
     }
 
     fun attack(count : Int) {

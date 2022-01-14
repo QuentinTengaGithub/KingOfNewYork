@@ -33,7 +33,7 @@ class GameState(ctx : Context) {
         Card("Title", "Test", 69, EnumSet.of(
             CardEffect.ExtraAttack,
             CardEffect.ExtraHealTimes2
-        ))
+        ), R.drawable.card_0_img)
     );
 
     private val players = arrayOf(
@@ -194,6 +194,51 @@ class GameState(ctx : Context) {
         }
 
         onPlayerInsideTokyoChanged?.invoke(kingOfTheHill, true);
+    }
+
+    fun hasEnoughEnergy(card : Card) : Boolean {
+        val player = players[currentPlayerTurn];
+        return player.playerEnergy >= card.cardCost;
+    }
+
+    fun buyCard(card : Card) : Boolean {
+        if (!hasEnoughEnergy(card)) return  false;
+
+        var attackCount = 0;
+
+        for (fx in card.cardEffect) {
+            when(fx) {
+                CardEffect.ExtraAttack -> attackCount += 1;
+                CardEffect.ExtraHealTimes2 -> {
+                    healPlayer(currentPlayerTurn)
+                    healPlayer(currentPlayerTurn)
+                }
+                CardEffect.ExtraVictoryPointsTimes2 -> {
+                    val lastVP = players[currentPlayerTurn].playerVictoryPoints;
+                    players[currentPlayerTurn].playerVictoryPoints += 2;
+
+                    onPlayerVictoryPointsChanged?.invoke(
+                        currentPlayerTurn,
+                        lastVP,
+                        players[currentPlayerTurn].playerVictoryPoints
+                    )
+                }
+                CardEffect.ExtraDiceRoll -> {
+                    players[currentPlayerTurn].extraDiceRoll += 1;
+                }
+            }
+        }
+
+        if (attackCount > 0) {
+            attackPlayers(currentPlayerTurn, attackCount);
+        }
+
+        return true;
+    }
+
+    fun getExtraDiceRoll() : Int {
+        if (currentPlayerTurn < 0) return  0;
+        return players[currentPlayerTurn].extraDiceRoll;
     }
 
     fun isFirstRound() : Boolean {
