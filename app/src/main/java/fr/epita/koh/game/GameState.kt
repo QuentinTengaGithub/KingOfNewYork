@@ -3,12 +3,10 @@ package fr.epita.koh.game
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
-import android.content.Intent
-import android.view.View
-import androidx.core.content.ContextCompat.startActivity
-import fr.epita.koh.GameActivity
 import fr.epita.koh.R
 import java.util.*
+import kotlin.math.max
+import kotlin.random.Random
 
 class GameState(ctx : Context) {
     private var onPlayerTurnChanged: ((Int, Boolean) -> Unit)? = null
@@ -30,11 +28,61 @@ class GameState(ctx : Context) {
     private var isFirstRound = true;
 
     private val cardsList = arrayOf(
-        Card("Title", "Test", 69, EnumSet.of(
+        Card("Attack & Heal", "Attack&Heal", 7, EnumSet.of(
             CardEffect.ExtraAttack,
             CardEffect.ExtraHealTimes2
-        ),0)
+        ), R.drawable.card_0_img),
+
+        Card("Extra Attack", "Attack all players", 4, EnumSet.of(
+            CardEffect.ExtraAttack
+        ), R.drawable.card_1_img),
+
+        Card("Extra Heal", "Heal the buyer", 3, EnumSet.of(
+            CardEffect.ExtraHealTimes2
+        ), R.drawable.card_2_img),
+
+        Card("Permanent Discount", "Permanent Discount for the buyer", 5, EnumSet.of(
+            CardEffect.PermanentCostDiscount
+        ), R.drawable.card_3_img),
+
+        Card("Extra Dice Roll", "The player can roll the dice one extra time", 2, EnumSet.of(
+            CardEffect.ExtraDiceRoll
+        ), R.drawable.card_4_img),
+
+        Card("Extra Point", "Give 3 victory points", 4, EnumSet.of(
+            CardEffect.ExtraVictoryPointsTimes2
+        ), R.drawable.card_5_img),
+
+        Card("Extra Victory Points & Heal", "Give 3 victory points and 2 heal points", 5, EnumSet.of(
+            CardEffect.ExtraVictoryPointsTimes2,
+            CardEffect.ExtraHealTimes2
+        ), R.drawable.card_6_img),
+
+        Card("Extra Point & Dice", "Give 3 victory points and roll the dice one extra time", 6, EnumSet.of(
+            CardEffect.ExtraVictoryPointsTimes2,
+            CardEffect.ExtraDiceRoll
+        ), R.drawable.card_1_img),
+
+        Card("Extra Heal & Permanent Discount", "Give heal points and permanent discount", 8, EnumSet.of(
+            CardEffect.ExtraVictoryPointsTimes2,
+            CardEffect.PermanentCostDiscount
+        ), R.drawable.card_2_img),
+
+        Card("Extra Heal & Attack", "Heal points and attack players", 7, EnumSet.of(
+            CardEffect.ExtraHealTimes2,
+            CardEffect.ExtraAttack
+        ), R.drawable.card_3_img),
+
+        Card("Extra Point & Heal & Attack & Roll Dice & Permanent Discount", "MASTER CARD", 11, EnumSet.of(
+            CardEffect.ExtraVictoryPointsTimes2,
+            CardEffect.ExtraHealTimes2,
+            CardEffect.ExtraDiceRoll,
+            CardEffect.ExtraAttack,
+            CardEffect.PermanentCostDiscount
+        ), R.drawable.card_4_img)
     );
+
+    private var shopCards = mutableListOf<Card>();
 
     private val players = arrayOf(
         Player(true),
@@ -196,6 +244,93 @@ class GameState(ctx : Context) {
         onPlayerInsideTokyoChanged?.invoke(kingOfTheHill, true);
     }
 
+    fun hasEnoughEnergy(card : Card) : Boolean {
+        val player = players[currentPlayerTurn];
+        val cost = max(1, card.cardCost - getCardDiscount());
+        return player.playerEnergy >= cost;
+    }
+
+    fun shuffleAllCards() {
+        shopCards.clear();
+        for (i in 0 until 3) {
+            shopCards.add(cardsList[Random.nextInt(0, cardsList.size)]);
+        }
+    }
+
+    fun shuffleCardId(id : Int) {
+        shopCards[id] = cardsList[Random.nextInt(0, cardsList.size)];
+    }
+
+    private fun addVictoryPoints(playerId : Int, count : Int) {
+        val lastVP = players[playerId].playerVictoryPoints;
+        players[playerId].playerVictoryPoints += count;
+
+        if (players[playerId].playerVictoryPoints < 0)
+            players[playerId].playerVictoryPoints = 0;
+
+        onPlayerVictoryPointsChanged?.invoke(
+            playerId,
+            lastVP,
+            players[playerId].playerVictoryPoints
+        )
+    }
+
+    fun buyCard(card : Card) : Boolean {
+        if (!hasEnoughEnergy(card)) return  false;
+
+        var attackCount = 0;
+        val cost = max(1, card.cardCost - getCardDiscount());
+
+        val current = players[currentPlayerTurn];
+        val lastEnergy = current.playerEnergy;
+        current.playerEnergy -= cost;
+        onPlayerEnergyChanged?.invoke(currentPlayerTurn, lastEnergy, current.playerEnergy);
+
+        for (fx in card.cardEffect) {
+            when(fx) {
+                CardEffect.ExtraAttack -> attackCount += 1;
+                CardEffect.ExtraHealTimes2 -> {
+                    healPlayer(currentPlayerTurn)
+                    healPlayer(currentPlayerTurn)
+                }
+                CardEffect.ExtraVictoryPointsTimes2 -> {
+                    addVictoryPoints(currentPlayerTurn, 2);
+                }
+                CardEffect.ExtraDiceRoll -> {
+                    players[currentPlayerTurn].extraDiceRoll += 1;
+                }
+                CardEffect.TakeAway2VictoryPointsAll -> {
+                    addVictoryPoints(0, -2);
+                    addVictoryPoints(1, -2);
+                    addVictoryPoints(2, -2);
+                    addVictoryPoints(3, -2);
+                }
+                CardEffect.StealKingSpot -> {
+                    enterKingOfTheHill(currentPlayerTurn);
+                }
+                CardEffect.PermanentCostDiscount -> {
+                    players[currentPlayerTurn].cardDiscount += 1;
+                }
+            }
+        }
+
+        if (attackCount > 0) {
+            attackPlayers(currentPlayerTurn, attackCount);
+        }
+
+        return true;
+    }
+
+    fun getCardDiscount() : Int {
+        if (currentPlayerTurn < 0) return  0;
+        return players[currentPlayerTurn].cardDiscount;
+    }
+
+    fun getExtraDiceRoll() : Int {
+        if (currentPlayerTurn < 0) return  0;
+        return players[currentPlayerTurn].extraDiceRoll;
+    }
+
     fun isFirstRound() : Boolean {
         return isFirstRound;
     }
@@ -278,6 +413,9 @@ class GameState(ctx : Context) {
     }
 
     fun reset() {
+
+        shuffleAllCards();
+
         currentPlayerTurn = -1;
         playersLeft = 4;
 

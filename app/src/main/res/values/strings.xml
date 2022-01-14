@@ -21,4 +21,9 @@
     <string name="next_player_str">Prochain Joueur</string>
     <string name="skip_hill">Rester</string>
     <string name="RedrawWC">REPIOCHER (Cout: 3)</string>
+    <string name="boats">BOATS</string>
+    <string name="valentin_bordeianu">Valentin BORDEIANU</string>
+    <string name="quentin_tenga">Quentin Tenga</string>
+    <string name="gurpal_singh">Gurpal Singh</string>
+    <string name="anthony_bousser">Anthony Bousser</string>
 </resources>
