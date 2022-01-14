@@ -30,7 +30,7 @@ class BuyCardsFragment : Fragment() {
         view.findViewById<Button>(R.id.shop_quit).setOnClickListener {
             activity.skipStage();
         }
-        val discount = 0;
+        val discount = activity.getDiscount();
         val carte_0 = Card("FstCard", "ntm", 5, EnumSet.of(CardEffect.ExtraAttack), R.drawable.card_0_img);
         val carte_1 = Card("SecCard", "Heal", 3, EnumSet.of(CardEffect.ExtraHealTimes2), R.drawable.card_1_img);
         val carte_2 = Card("ThirdCard", "Victory", 5, EnumSet.of(CardEffect.ExtraVictoryPointsTimes2), R.drawable.card_2_img);
@@ -59,6 +59,8 @@ class BuyCardsFragment : Fragment() {
             val discount_price = carte_2.cardCost - discount;
             chip_3.setText(discount_price.toString());
         }
+
+
 
         return view
     }
