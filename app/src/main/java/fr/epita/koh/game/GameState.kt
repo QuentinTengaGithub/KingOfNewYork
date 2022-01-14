@@ -3,13 +3,10 @@ package fr.epita.koh.game
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
-import android.content.Intent
-import android.view.View
-import androidx.core.content.ContextCompat.startActivity
-import fr.epita.koh.GameActivity
 import fr.epita.koh.R
 import java.util.*
 import kotlin.math.max
+import kotlin.random.Random
 
 class GameState(ctx : Context) {
     private var onPlayerTurnChanged: ((Int, Boolean) -> Unit)? = null
@@ -84,6 +81,8 @@ class GameState(ctx : Context) {
             CardEffect.PermanentCostDiscount
         ), R.drawable.card_4_img)
     );
+
+    private var shopCards = mutableListOf<Card>();
 
     private val players = arrayOf(
         Player(true),
@@ -251,9 +250,23 @@ class GameState(ctx : Context) {
         return player.playerEnergy >= cost;
     }
 
+    fun shuffleAllCards() {
+        shopCards.clear();
+        for (i in 0 until 3) {
+            shopCards.add(cardsList[Random.nextInt(0, cardsList.size)]);
+        }
+    }
+
+    fun shuffleCardId(id : Int) {
+        shopCards[id] = cardsList[Random.nextInt(0, cardsList.size)];
+    }
+
     private fun addVictoryPoints(playerId : Int, count : Int) {
         val lastVP = players[playerId].playerVictoryPoints;
         players[playerId].playerVictoryPoints += count;
+
+        if (players[playerId].playerVictoryPoints < 0)
+            players[playerId].playerVictoryPoints = 0;
 
         onPlayerVictoryPointsChanged?.invoke(
             playerId,
@@ -400,6 +413,9 @@ class GameState(ctx : Context) {
     }
 
     fun reset() {
+
+        shuffleAllCards();
+
         currentPlayerTurn = -1;
         playersLeft = 4;
 
