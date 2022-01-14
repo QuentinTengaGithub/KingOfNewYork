@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import fr.epita.koh.fragments.*
+import fr.epita.koh.game.Card
 import fr.epita.koh.game.Dice
 import fr.epita.koh.game.GameState
 import fr.epita.koh.game.PlayerState
@@ -194,6 +195,12 @@ class GameActivity : AppCompatActivity() {
 
     fun getExtraDiceCount() : Int {
         return gameState.getExtraDiceRoll();
+    }
+    fun getDiscount() : Int {
+        return gameState.getCardDiscount();
+    }
+    fun hasEnoughEnergy(card : Card) : Boolean {
+        return gameState.hasEnoughEnergy(card);
     }
 
     fun becomeKingOfNY() {
