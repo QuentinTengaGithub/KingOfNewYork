@@ -458,4 +458,8 @@ class GameState(ctx : Context) {
     fun getCurrentTurn() : Int {
         return currentPlayerTurn;
     }
+
+    fun getCard(id: Int): Card {
+        return shopCards[id];
+    }
 }

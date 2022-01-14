@@ -196,9 +196,15 @@ class GameActivity : AppCompatActivity() {
     fun getExtraDiceCount() : Int {
         return gameState.getExtraDiceRoll();
     }
+
+    fun getGameState() : GameState {
+        return gameState;
+    }
+
     fun getDiscount() : Int {
         return gameState.getCardDiscount();
     }
+
     fun hasEnoughEnergy(card : Card) : Boolean {
         return gameState.hasEnoughEnergy(card);
     }
